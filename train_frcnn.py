@@ -25,15 +25,19 @@ physical_devices = tf.config.experimental.list_physical_devices('GPU')
 assert len(physical_devices) > 0, "Not enough GPU hardware devices available"
 tf_config = tf.config.experimental.set_memory_growth(physical_devices[0], True)
 
-# tensorboard 로그 작성 함수
+# tensorboard
 def write_log(callback, names, logs, batch_no):
     for name, value in zip(names, logs):
-        summary = tf.Summary()
-        summary_value = summary.value.add()
-        summary_value.simple_value = value
-        summary_value.tag = name
-        callback.writer.add_summary(summary, batch_no)
-        callback.writer.flush()
+        pass
+#        summary = tf.Summary()
+#        summary_value = summary.value.add()
+#        summary_value.simple_value = value
+#        summary_value.tag = name
+#        callback.writer.add_summary(summary, batch_no)
+#        callback.writer.flush()
+#        with callback.writer.as_default() :
+#            tf.summary.scalar( name, value)
+#            callback.writer.flush()
 
 sys.setrecursionlimit(40000)
 
