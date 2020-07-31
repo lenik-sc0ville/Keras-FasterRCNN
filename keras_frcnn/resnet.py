@@ -18,10 +18,7 @@ from keras_frcnn.FixedBatchNormalization import FixedBatchNormalization
 
 
 def get_weight_path():
-    if K.image_dim_ordering() == 'th':
-        return 'resnet50_weights_th_dim_ordering_th_kernels_notop.h5'
-    else:
-        return 'resnet50_weights_tf_dim_ordering_tf_kernels.h5'
+    return 'resnet50_weights_tf_dim_ordering_tf_kernels.h5'
 
 
 def get_img_output_length(width, height):
@@ -42,10 +39,7 @@ def identity_block(input_tensor, kernel_size, filters, stage, block, trainable=T
 
     nb_filter1, nb_filter2, nb_filter3 = filters
     
-    if K.image_dim_ordering() == 'tf':
-        bn_axis = 3
-    else:
-        bn_axis = 1
+    bn_axis = 3
 
     conv_name_base = 'res' + str(stage) + block + '_branch'
     bn_name_base = 'bn' + str(stage) + block + '_branch'
@@ -71,10 +65,7 @@ def identity_block_td(input_tensor, kernel_size, filters, stage, block, trainabl
     # identity block time distributed
 
     nb_filter1, nb_filter2, nb_filter3 = filters
-    if K.image_dim_ordering() == 'tf':
-        bn_axis = 3
-    else:
-        bn_axis = 1
+    bn_axis = 3
 
     conv_name_base = 'res' + str(stage) + block + '_branch'
     bn_name_base = 'bn' + str(stage) + block + '_branch'
@@ -99,10 +90,7 @@ def identity_block_td(input_tensor, kernel_size, filters, stage, block, trainabl
 def conv_block(input_tensor, kernel_size, filters, stage, block, strides=(2, 2), trainable=True):
 
     nb_filter1, nb_filter2, nb_filter3 = filters
-    if K.image_dim_ordering() == 'tf':
-        bn_axis = 3
-    else:
-        bn_axis = 1
+    bn_axis = 3
 
     conv_name_base = 'res' + str(stage) + block + '_branch'
     bn_name_base = 'bn' + str(stage) + block + '_branch'
@@ -131,10 +119,7 @@ def conv_block_td(input_tensor, kernel_size, filters, stage, block, input_shape,
     # conv block time distributed
 
     nb_filter1, nb_filter2, nb_filter3 = filters
-    if K.image_dim_ordering() == 'tf':
-        bn_axis = 3
-    else:
-        bn_axis = 1
+    bn_axis = 3
 
     conv_name_base = 'res' + str(stage) + block + '_branch'
     bn_name_base = 'bn' + str(stage) + block + '_branch'
@@ -161,10 +146,7 @@ def conv_block_td(input_tensor, kernel_size, filters, stage, block, input_shape,
 def nn_base(input_tensor=None, trainable=False):
 
     # Determine proper input shape
-    if K.image_dim_ordering() == 'th':
-        input_shape = (3, None, None)
-    else:
-        input_shape = (None, None, 3)
+    input_shape = (None, None, 3)
 
     if input_tensor is None:
         img_input = Input(shape=input_shape)
@@ -174,10 +156,7 @@ def nn_base(input_tensor=None, trainable=False):
         else:
             img_input = input_tensor
 
-    if K.image_dim_ordering() == 'tf':
-        bn_axis = 3
-    else:
-        bn_axis = 1
+    bn_axis = 3
 
     x = ZeroPadding2D((3, 3))(img_input)
 

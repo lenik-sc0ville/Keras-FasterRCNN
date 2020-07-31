@@ -128,16 +128,13 @@ test_imgs = [s for s in all_imgs if s['imageset'] == 'test']
 print('Num train samples {}'.format(len(train_imgs)))
 print('Num test samples {}'.format(len(test_imgs)))
 
-# groundtruth anchor 데이터 가져오기
-data_gen_train = data_generators.get_anchor_gt(train_imgs, classes_count, C, nn.get_img_output_length, K.image_dim_ordering(), mode='train')
-data_gen_test = data_generators.get_anchor_gt(test_imgs, classes_count, C, nn.get_img_output_length, K.image_dim_ordering(), mode='test')
+# groundtruth anchor
+data_gen_train = data_generators.get_anchor_gt(train_imgs, classes_count, C, nn.get_img_output_length, 'tf', mode='train')
+data_gen_test = data_generators.get_anchor_gt(test_imgs, classes_count, C, nn.get_img_output_length, 'tf', mode='test')
 
-if K.image_dim_ordering() == 'th':
-    input_shape_img = (3, None, None)
-else:
-    input_shape_img = (None, None, 3)
+input_shape_img = (None, None, 3)
 
-# input placeholder 정의
+# input placeholder
 img_input = Input(shape=input_shape_img)
 roi_input = Input(shape=(None, 4))
 
@@ -145,11 +142,11 @@ roi_input = Input(shape=(None, 4))
 shared_layers = nn.nn_base(img_input, trainable=True)
 
 # define the RPN, built on the base layers
-# RPN 정의
+# RPN
 num_anchors = len(C.anchor_box_scales) * len(C.anchor_box_ratios)
 rpn = nn.rpn(shared_layers, num_anchors)
 
-# detection network 정의
+# detection network
 classifier = nn.classifier(shared_layers, roi_input, C.num_rois, nb_classes=len(classes_count), trainable=True)
 
 model_rpn = Model(img_input, rpn[:2])
@@ -224,7 +221,7 @@ for epoch_num in range(num_epochs):
 
         P_rpn = model_rpn.predict_on_batch(X)
 
-        R = roi_helpers.rpn_to_roi(P_rpn[0], P_rpn[1], C, K.image_dim_ordering(), use_regr=True, overlap_thresh=0.7, max_boxes=300)
+        R = roi_helpers.rpn_to_roi(P_rpn[0], P_rpn[1], C, use_regr=True, overlap_thresh=0.7, max_boxes=300)
         # note: calc_iou converts from (x1,y1,x2,y2) to (x,y,w,h) format
         X2, Y1, Y2, IouS = roi_helpers.calc_iou(R, img_data, C, class_mapping)
 

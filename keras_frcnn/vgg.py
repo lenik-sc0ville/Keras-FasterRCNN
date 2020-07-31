@@ -19,11 +19,7 @@ from keras_frcnn.RoiPoolingConv import RoiPoolingConv
 
 
 def get_weight_path():
-    if K.image_dim_ordering() == 'th':
-        print('pretrained weights not available for VGG with theano backend')
-        return
-    else:
-        return 'vgg16_weights_tf_dim_ordering_tf_kernels.h5'
+    return 'vgg16_weights_tf_dim_ordering_tf_kernels.h5'
 
 
 def get_img_output_length(width, height):
@@ -37,10 +33,7 @@ def nn_base(input_tensor=None, trainable=False):
 
 
     # Determine proper input shape
-    if K.image_dim_ordering() == 'th':
-        input_shape = (3, None, None)
-    else:
-        input_shape = (None, None, 3)
+    input_shape = (None, None, 3)
 
     if input_tensor is None:
         img_input = Input(shape=input_shape)
@@ -50,10 +43,7 @@ def nn_base(input_tensor=None, trainable=False):
         else:
             img_input = input_tensor
 
-    if K.image_dim_ordering() == 'tf':
-        bn_axis = 3
-    else:
-        bn_axis = 1
+    bn_axis = 3
 
     # Block 1
     x = Conv2D(64, (3, 3), activation='relu', padding='same', name='block1_conv1')(img_input)

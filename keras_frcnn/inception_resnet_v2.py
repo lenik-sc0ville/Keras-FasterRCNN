@@ -290,10 +290,7 @@ def inception_resnet_block_td(x, scale, block_type, block_idx, activation='relu'
 def nn_base(input_tensor=None, trainable=False):
 
     # Determine proper input shape
-    if K.image_dim_ordering() == 'th':
-        input_shape = (3, None, None)
-    else:
-        input_shape = (None, None, 3)
+    input_shape = (None, None, 3)
 
     if input_tensor is None:
         img_input = Input(shape=input_shape)
@@ -303,10 +300,7 @@ def nn_base(input_tensor=None, trainable=False):
         else:
             img_input = input_tensor
 
-    if K.image_dim_ordering() == 'tf':
-        bn_axis = 3
-    else:
-        bn_axis = 1
+    bn_axis = 3
 
     # Stem block: 35 x 35 x 192
     x = conv2d_bn(img_input, 32, 3, strides=2, padding='valid', name='Stem_block' + '_conv1')
