@@ -172,12 +172,15 @@ model_rpn.compile(optimizer=optimizer, loss=[losses.rpn_loss_cls(num_anchors), l
 model_classifier.compile(optimizer=optimizer_classifier, loss=[losses.class_loss_cls, losses.class_loss_regr(len(classes_count)-1)], metrics={'dense_class_{}'.format(len(classes_count)): 'accuracy'})
 model_all.compile(optimizer='sgd', loss='mae')
 
-# Tensorboard log폴더 생성
+# fix some missing stuff in TF
+model_all._get_distribution_strategy = lambda: None
+
+# Tensorboard log
 log_path = './logs'
 if not os.path.isdir(log_path):
     os.mkdir(log_path)
 
-# Tensorboard log모델 연결
+# Tensorboard log
 callback = TensorBoard(log_path)
 callback.set_model(model_all)
 
