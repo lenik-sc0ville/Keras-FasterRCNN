@@ -15,7 +15,12 @@ from keras_frcnn import roi_helpers
 # Set learning phase to 0 for model.predict. Set to 1 for training
 K.set_learning_phase(0)
 
+import tensorflow as tf
 
+# this fixes "Could not create cudnn handle: CUDNN_STATUS_INTERNAL_ERROR"
+physical_devices = tf.config.experimental.list_physical_devices('GPU')
+assert len(physical_devices) > 0, "Not enough GPU hardware devices available"
+tf_config = tf.config.experimental.set_memory_growth(physical_devices[0], True)
 sys.setrecursionlimit(40000)
 
 parser = OptionParser()
