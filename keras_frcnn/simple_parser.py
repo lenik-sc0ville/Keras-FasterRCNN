@@ -38,7 +38,7 @@ def get_data(input_path):
 
                 img = cv2.imread(os.path.join( folder, filename))
                 (rows,cols) = img.shape[:2]
-                all_imgs[filename]['filepath'] = filename
+                all_imgs[filename]['filepath'] = os.path.join( folder, filename)
                 all_imgs[filename]['width'] = cols
                 all_imgs[filename]['height'] = rows
                 all_imgs[filename]['bboxes'] = []
