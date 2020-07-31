@@ -1,3 +1,4 @@
+import os
 import cv2
 import numpy as np
 
@@ -10,6 +11,8 @@ def get_data(input_path):
     class_mapping = {}
 
     visualise = True
+
+    folder, _ = os.path.split( input_path )
 
     with open(input_path,'r') as f:
 
@@ -33,7 +36,7 @@ def get_data(input_path):
             if filename not in all_imgs:
                 all_imgs[filename] = {}
 
-                img = cv2.imread(filename)
+                img = cv2.imread(os.path.join( folder, filename))
                 (rows,cols) = img.shape[:2]
                 all_imgs[filename]['filepath'] = filename
                 all_imgs[filename]['width'] = cols
