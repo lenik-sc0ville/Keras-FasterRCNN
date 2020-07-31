@@ -20,6 +20,10 @@ import keras_frcnn.roi_helpers as roi_helpers
 from keras.utils import generic_utils
 from keras.callbacks import TensorBoard
 
+# this fixes "Could not create cudnn handle: CUDNN_STATUS_INTERNAL_ERROR"
+physical_devices = tf.config.experimental.list_physical_devices('GPU')
+assert len(physical_devices) > 0, "Not enough GPU hardware devices available"
+tf_config = tf.config.experimental.set_memory_growth(physical_devices[0], True)
 
 # tensorboard 로그 작성 함수
 def write_log(callback, names, logs, batch_no):
